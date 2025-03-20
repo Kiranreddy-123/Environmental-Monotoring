@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Environmental Sensors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-image: url("clouds.gif");
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      height: 100%;
+      width: 100%;
+    }
+
+    .header {
+      background-color: #f7f7f7;
+      border: 1px solid #666;
+      border-radius: 30px;
+      margin-bottom: 20px;
+      text-align: center;
+      padding: 10px;
+      font-size: xx-large;
+    }
+
+    .sensor {
+      background-color: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      padding: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sensor_header {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .sensor_body {
+      font-size: 24px;
+      font-weight: bold;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">Atmospheric Condition</div>
+  <div class="sensor temp">
+    <div class="sensor_header">Temperature</div>
+    <div class="sensor_body" id="temp-value"></div>
+  </div>
+  <div class="sensor humidity">
+    <div class="sensor_header">Humidity</div>
+    <div class="sensor_body" id="humidity-value"></div>
+  </div>
+  <div class="sensor CO2">
+    <div class="sensor_header">CO2 - Percentage</div>
+    <div class="sensor_body" id="co2-value"></div>
+  </div>
+  <div class="sensor O2">
+    <div class="sensor_header">O2 - Percentage</div>
+    <div class="sensor_body" id="o2-value"></div>
+  </div>
+  <div class="sensor quality">
+    <div class="sensor_header">Air Quality</div>
+    <div class="sensor_body" id="quality"></div>
+  </div>
+
+  <script>
+    // Sample data (replace with actual sensor readings)
+    let tempValue = 25;
+    let humidityValue = 50;
+    let co2Value = 800;
+    let o2Value = 21;
+    let quality = 80;
+
+    // Update sensor values
+    document.getElementById("temp-value").innerText = tempValue + "°C";
+    document.getElementById("humidity-value").innerText = humidityValue + "%";
+    document.getElementById("co2-value").innerText = co2Value + " ppm";
+    document.getElementById("o2-value").innerText = o2Value + "%";
+    document.getElementById("quality").innerText = quality + "%";
+
+    // Send data to Google Apps Script every minute
+    setInterval(() => {
+      let data = {
+        Date: new Date().toISOString(),
+        Temperature: tempValue,
+        Humidity: humidityValue,
+        CO2: co2Value,
+        O2: o2Value,
+        Quality: quality,
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbxf-ozGfGiq0hA2Bj9FinktA6mblr9Vz0yWs7ovblcGXXPOR6F9GAG0dtxAWnk-kbw20w/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    }, 1000); // Send data every 60000 milliseconds (1 minute)
+  </script>
+</body>
+</html>
